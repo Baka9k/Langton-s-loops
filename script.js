@@ -103,9 +103,9 @@ Loops.graphics.methods = {
 		var width = Loops.settings.cellwidth;
 		var height = Loops.settings.cellheight;
 		context.fillStyle = color || "#000000";
+		context.strokeStyle = "#ff0000";
+		context.strokeRect(x, y, width, height);
 		context.fillRect(x, y, width, height);
-		
-		console.log(x,y,color);
 	},
 	
 	getColor: function(n) {
@@ -146,6 +146,7 @@ Loops.graphics.methods = {
 			for (var j = 0; j < cellsOnX; j++) {
 				var cellnumber = i * cellsOnX + j;
 				var cellcolor = gMethods.getColor (array[cellnumber]);
+				console.log(array[cellnumber]);
 				gMethods.drawCell (x, y, cellcolor);
 				x += settings.cellwidth;
 			};

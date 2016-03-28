@@ -78,9 +78,24 @@ Loops.physics.methods = {
 			for (var j = 0; j < width; j++) {
 				array[index] = initial[i][j];
 				index ++;
-			};
+			}
 			index += skip;
-		};
+		}
+	},
+	
+	swap: function(arr, i0, i1) {
+		var t = arr[i0];
+		arr[i0] = arr[i1];
+		arr[i1] = t;
+	},
+	
+	applyRules: function(Rules) {
+		
+	},
+	
+	step: function() {
+		var methods = Loops.physics.methods;
+		methods.applyRules();
 	},
 	
 };
@@ -185,27 +200,6 @@ Loops.graphics.methods = {
 	
 };
 
-
-
-Loops.physics.methods = {
-
-	swap: function(arr, i0, i1) {
-		var t = arr[i0];
-		arr[i0] = arr[i1];
-		arr[i1] = t;
-	},
-	
-	applyRules: function(Rules) {
-		
-	},
-	
-	step: function() {
-		var methods = Loops.physics.methods;
-		methods.applyRules();
-	},
-
-	
-};
 
 
 

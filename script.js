@@ -78,7 +78,7 @@ Loops.physics.methods = {
 			for (var j = 0; j < width; j++) {
 				array[index] = initial[i][j];
 				index ++;
-			}
+			};
 			index += skip;
 		};
 	},
@@ -98,17 +98,66 @@ Loops.graphics.methods = {
 		context.fillRect(0, 0, width, height);
 	},
 	
-	drawCells = function() {
-		var variables = Loops.graphics.variables;
-		var context = variables.context;
-		var settings = Loops.settings;
+	drawCell: function(x, y, color) {
+		var context = Loops.graphics.variables.context;
+		var width = Loops.settings.cellwidth;
+		var height = Loops.settings.cellheight;
+		context.fillStyle = color || "#000000";
+		context.fillRect(x, y, width, height);
 		
-	}
+		console.log(x,y,color);
+	},
+	
+	getColor: function(n) {
+		var color;
+		switch (n) {
+			case 0:
+				color = "#000000";
+				break;
+			case 1:
+				color = "#ff0000";
+				break;
+			case 2:
+				color = "#00ff00";
+				break;
+			case 3:
+				color = "#0000ff";
+				break;
+			case 4:
+				color = "#ffffff";
+				break;
+		}
+		return color;
+	},
+	
+	drawCells: function() {
+		var gVariables = Loops.graphics.variables;
+		var pVariables = Loops.physics.variables;
+		var context = gVariables.context;
+		var settings = Loops.settings;
+		var cellsOnX = pVariables.cellsOnX;
+		var cellsOnY = pVariables.cellsOnY;
+		var array = Loops.physics.array;
+		var gMethods = Loops.graphics.methods;
+		
+		var x = 0;
+		var y = 0;
+		for (var i = 0; i < cellsOnY; i++) {
+			for (var j = 0; j < cellsOnX; j++) {
+				var cellnumber = i * cellsOnX + j;
+				var cellcolor = gMethods.getColor (array[cellnumber]);
+				gMethods.drawCell (x, y, cellcolor);
+				x += settings.cellwidth;
+			};
+			x = 0;
+			y += settings.cellheight;
+		};
+	},
 	
 	draw: function() {
 		var methods = Loops.graphics.methods;
 		methods.drawBackground();
-		
+		methods.drawCells();
 	}
 	
 };

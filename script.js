@@ -10,8 +10,8 @@ var Loops = {
 		methods: {},
 	},
 	settings: {
-		cellwidth: 32,
-		cellheight: 32,
+		cellwidth: 12,
+		cellheight: 12,
 	},
 }
 
@@ -71,7 +71,7 @@ Loops.physics.methods = {
 		var initial = rules.initial;
 		var width = initial[0].length;
 		var height = initial.length;
-		var start = (array.length / 2) - (height / 2) * variables.cellsOnX - (width / 2);
+		var start = Math.round(array.length / 2) - Math.round(height / 2) * variables.cellsOnX - Math.round(width / 2);
 		var skip = variables.cellsOnX - width;
 		var index = start;
 		for (var i = 0; i < height; i++) {
@@ -102,9 +102,7 @@ Loops.graphics.methods = {
 		var context = Loops.graphics.variables.context;
 		var width = Loops.settings.cellwidth;
 		var height = Loops.settings.cellheight;
-		context.fillStyle = color || "#000000";
-		context.strokeStyle = "#ff0000";
-		context.strokeRect(x, y, width, height);
+		context.fillStyle = color || "#000000";;
 		context.fillRect(x, y, width, height);
 	},
 	
@@ -146,7 +144,6 @@ Loops.graphics.methods = {
 			for (var j = 0; j < cellsOnX; j++) {
 				var cellnumber = i * cellsOnX + j;
 				var cellcolor = gMethods.getColor (array[cellnumber]);
-				console.log(array[cellnumber]);
 				gMethods.drawCell (x, y, cellcolor);
 				x += settings.cellwidth;
 			};

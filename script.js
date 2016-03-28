@@ -64,7 +64,7 @@ Loops.physics.methods = {
 		var array = Loops.physics.array;
 		var variables = Loops.physics.variables;
 		
-		for (var i = 0; i <= array.length; i++) {
+		for (var i = 0; i < array.length; i++) {
 			array[i] = 0;
 		}
 		
@@ -89,9 +89,22 @@ Loops.physics.methods = {
 		var variables = Loops.physics.variables;
 		var rulesArr = rules.rulesList.split(" ");
 		for (var i = 0; i < array.length; i++) {
+		
 			// exclude edges
 			if ((Number.isInteger(i / variables.cellsOnX)) || (Number.isInteger((i+1) / variables.cellsOnX)) || (i < variables.cellsOnX) || (i > variables.cellsOnX * (variables.cellsOnY - 1))) continue;
 			
+			var left = array[i - 1];
+			var right = array[i + 1];
+			var top = array[i - variables.cellsOnX];
+			var bottom = [i + variables.cellsOnX];
+			
+			for (var j = 0; j < rulesArr.length; j++) {
+				if (rulesArr[j].charAt(0) == array[i]) {
+					if ((rulesArr[j].charAt(1) == top) && (rulesArr[j].charAt(2) == right) && (rulesArr[j].charAt(3) == bottom) && (rulesArr[j].charAt(4) == left)) {
+						array[i] = rulesArr[j].charAt(5);
+					}
+				}
+			}
 			
 		}
 	},

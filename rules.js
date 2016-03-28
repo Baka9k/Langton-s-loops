@@ -1,5 +1,5 @@
-// rules format: north - east  - south - west
-//               top   - right - down  - left
+// rules format: north - east  - south  - west
+//               top   - right - bottom - left
 //
 // This models an array of 8-state cells on a regular Cartesian grid. Synchronously, all cells update to a new set according to a rule table and their own present state & the four neighbour states.. this is four-fold symmetrical, so one rule that states '1 2345 6'is interpreted to mean that a cell currently in state 1, & with neighbours 2345 will become state 6- but so, in the other three compass directions, will '1 3452 6', '1 4523 6' and ' 1 5234 6'. This makes the rule table more comapact. A kind of 'genetic code' circulates in each loop, and as the 'genes' arrive at the active site they govern how it extends. The two main genes are one to extend and sheathe the core, and one to turn a right angle corner. The other states allow termination & disconnection of completed loops.
 

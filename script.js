@@ -110,19 +110,44 @@ Loops.graphics.methods = {
 		var color;
 		switch (n) {
 			case 0:
-				color = "#000000";
+				// Backgroung
+				// BLACK
+				color = "#000000"; 
 				break;
 			case 1:
-				color = "#ff0000";
+				// Core
+				// BLUE
+				color = "#0000FF";
 				break;
 			case 2:
-				color = "#00ff00";
+				// Sheath
+				// RED
+				color = "#FF0000";
 				break;
 			case 3:
-				color = "#0000ff";
+				// Support left tyrning; bonding two arms; generating new off-shoot; cap off-shoot
+				// GREEN
+				color = "#00FF00";
 				break;
 			case 4:
-				color = "#ffffff";
+				// Control left-turning & finishing a sprouted loop
+				// YELLOW
+				color = "#FFFF00";
+				break;
+			case 5:
+				// Disconnect parent from offspring
+				// PINK
+				color = "#FFC0CB";
+				break;
+			case 6:
+				// Point to where new sprout should start; guide sprout; finish sprout growth
+				// WHITE
+				color = "#FFFFFF";
+				break;
+			case 7:
+				// Hold info. on straight growth of arm & offspring
+				// CYAN
+				color = "#00FFFF";
 				break;
 		}
 		return color;
@@ -156,12 +181,31 @@ Loops.graphics.methods = {
 		var methods = Loops.graphics.methods;
 		methods.drawBackground();
 		methods.drawCells();
-	}
+	},
 	
 };
 
 
 
+Loops.physics.methods = {
+
+	swap: function(arr, i0, i1) {
+		var t = arr[i0];
+		arr[i0] = arr[i1];
+		arr[i1] = t;
+	},
+	
+	applyRules: function(Rules) {
+		
+	},
+	
+	step: function() {
+		var methods = Loops.physics.methods;
+		methods.applyRules();
+	},
+
+	
+};
 
 
 

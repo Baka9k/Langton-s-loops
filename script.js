@@ -49,8 +49,13 @@ Loops.init = function() {
 	
 	
 	Loops.physics.methods.initArray();
-	Loops.physics.methods.step();
 	Loops.graphics.methods.draw();
+	
+	//setInterval(function() {
+		Loops.physics.methods.step();
+		Loops.graphics.methods.draw();
+	//}, 500);
+
 	
 };
 
@@ -100,6 +105,7 @@ Loops.physics.methods = {
 			
 			for (var j = 0; j < rulesArr.length; j++) {
 				if (rulesArr[j].charAt(0) == array[i]) {
+					console.log();
 					if ((rulesArr[j].charAt(1) == top) && (rulesArr[j].charAt(2) == right) && (rulesArr[j].charAt(3) == bottom) && (rulesArr[j].charAt(4) == left)) {
 						array[i] = rulesArr[j].charAt(5);
 					}

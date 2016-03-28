@@ -49,6 +49,7 @@ Loops.init = function() {
 	
 	
 	Loops.physics.methods.initArray();
+	Loops.physics.methods.step();
 	Loops.graphics.methods.draw();
 	
 };
@@ -58,9 +59,9 @@ Loops.init = function() {
 Loops.physics.methods = {
 
 	initArray: function() {
-	
-		var array = Loops.physics.array;
+		
 		var rules = Loops.physics.rules;
+		var array = Loops.physics.array;
 		var variables = Loops.physics.variables;
 		
 		for (var i = 0; i <= array.length; i++) {
@@ -83,19 +84,22 @@ Loops.physics.methods = {
 		}
 	},
 	
-	swap: function(arr, i0, i1) {
-		var t = arr[i0];
-		arr[i0] = arr[i1];
-		arr[i1] = t;
-	},
-	
-	applyRules: function(Rules) {
-		
+	applyRules: function(rules) {
+		var array = Loops.physics.array;
+		var variables = Loops.physics.variables;
+		var rulesArr = rules.rulesList.split(" ");
+		for (var i = 0; i < array.length; i++) {
+			// exclude edges
+			if ((Number.isInteger(i / variables.cellsOnX)) || (Number.isInteger((i+1) / variables.cellsOnX)) || (i < variables.cellsOnX) || (i > variables.cellsOnX * (variables.cellsOnY - 1))) continue;
+			
+			
+		}
 	},
 	
 	step: function() {
+		var rules = Loops.physics.rules;
 		var methods = Loops.physics.methods;
-		methods.applyRules();
+		methods.applyRules(rules);
 	},
 	
 };

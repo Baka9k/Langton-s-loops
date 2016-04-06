@@ -7,7 +7,8 @@ var Loops = {
 		variables: {},
 		rules: Rules,
 		expandedRules: [],
-		array: "",
+		array0: [],
+		array1: [],
 		methods: {},
 	},
 	settings: {
@@ -44,19 +45,20 @@ Loops.init = function() {
 	var cellsOnX = Math.ceil(gVariables.width / settings.cellwidth);
 	var cellsOnY = Math.ceil(gVariables.height / settings.cellheight);
 	
-	Loops.physics.array = new Uint8Array(cellsOnX * cellsOnY);
+	Loops.physics.array0 = new Uint8Array(cellsOnX * cellsOnY);
+	Loops.physics.array1 = new Uint8Array(cellsOnX * cellsOnY);
 	pVariables.cellsOnX = cellsOnX;
 	pVariables.cellsOnY = cellsOnY;
-	
+	pVariables.currentArray = 0;
 	
 	Loops.physics.methods.initArray();
 	Loops.physics.methods.expandRules(Loops.physics.rules);
 	Loops.graphics.methods.draw();
 	
-	//setInterval(function() {
+	setInterval(function() {
 		Loops.physics.methods.step();
 		Loops.graphics.methods.draw();
-	//}, 500);
+	}, 300);
 
 	
 };
@@ -68,7 +70,7 @@ Loops.physics.methods = {
 	initArray: function() {
 		
 		var rules = Loops.physics.rules;
-		var array = Loops.physics.array;
+		var array = Loops.physics.array0;
 		var variables = Loops.physics.variables;
 		
 		for (var i = 0; i < array.length; i++) {
@@ -105,29 +107,39 @@ Loops.physics.methods = {
 	},
 	
 	applyRules: function(rulesArr) {
-	
-		var array = Loops.physics.array;
-		var variables = Loops.physics.variables;
 		
-		for (var i = 0; i < array.length; i++) {
+		var variables = Loops.physics.variables;
+		if (variables.currentArray == 0) {
+			var currentArray = Loops.physics.array0;
+			var nextArray = Loops.physics.array1;
+			var next = 1;
+		} else {
+			var currentArray = Loops.physics.array1;
+			var nextArray = Loops.physics.array0;
+			var next = 0;
+		}
+		
+		for (var i = 0; i < currentArray.length; i++) {
 		
 			// exclude edges
 			if ((Number.isInteger(i / variables.cellsOnX)) || (Number.isInteger((i+1) / variables.cellsOnX)) || (i < variables.cellsOnX) || (i > variables.cellsOnX * (variables.cellsOnY - 1))) continue;
 			
-			var left = array[i - 1];
-			var right = array[i + 1];
-			var top = array[i - variables.cellsOnX];
-			var bottom = array[i + variables.cellsOnX];
+			var left = currentArray[i - 1];
+			var right = currentArray[i + 1];
+			var top = currentArray[i - variables.cellsOnX];
+			var bottom = currentArray[i + variables.cellsOnX];
 			
 			for (var j = 0; j < rulesArr.length; j++) {
-				if (rulesArr[j].charAt(0) == array[i]) {
+				if (rulesArr[j].charAt(0) == currentArray[i]) {
 					if ((rulesArr[j].charAt(1) == top) && (rulesArr[j].charAt(2) == right) && (rulesArr[j].charAt(3) == bottom) && (rulesArr[j].charAt(4) == left)) {
-						array[i] = rulesArr[j].charAt(5);
+						nextArray[i] = rulesArr[j].charAt(5);
 					}
 				}
 			}
 			
 		}
+		
+		Loops.physics.variables.currentArray = next;
 	},
 	
 	step: function() {
@@ -213,7 +225,11 @@ Loops.graphics.methods = {
 		var settings = Loops.settings;
 		var cellsOnX = pVariables.cellsOnX;
 		var cellsOnY = pVariables.cellsOnY;
-		var array = Loops.physics.array;
+		if (pVariables.currentArray == 0) {
+			var array = Loops.physics.array0;
+		} else {
+			var array = Loops.physics.array1;
+		}
 		var gMethods = Loops.graphics.methods;
 		
 		var x = 0;

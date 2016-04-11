@@ -73,9 +73,7 @@ Loops.physics.methods = {
 		var array = Loops.physics.array0;
 		var variables = Loops.physics.variables;
 		
-		for (var i = 0; i < array.length; i++) {
-			array[i] = 0;
-		}
+		array.fill(0);
 		
 		//Paste inintial cells in center of array
 		var initial = rules.initial;
@@ -121,18 +119,40 @@ Loops.physics.methods = {
 		
 		for (var i = 0; i < currentArray.length; i++) {
 		
-			// exclude edges
-			if ((Number.isInteger(i / variables.cellsOnX)) || (Number.isInteger((i+1) / variables.cellsOnX)) || (i < variables.cellsOnX) || (i > variables.cellsOnX * (variables.cellsOnY - 1))) continue;
+			// edges
+			if ((Number.isInteger(i / variables.cellsOnX)) || (Number.isInteger((i+1) / variables.cellsOnX)) || (i < variables.cellsOnX) || (i > variables.cellsOnX * (variables.cellsOnY - 1))) {
+				
+				if (Number.isInteger(i / variables.cellsOnX)) {
+					var left = currentArray[i + variables.cellsOnX - 1];
+				} 
+				if (Number.isInteger((i+1) / variables.cellsOnX)) {
+					var right = currentArray[i - variables.cellsOnX + 1];
+				}
+				if (i < variables.cellsOnX) {
+					var top = currentArray[i - variables.cellsOnX + variables.cellsOnX * variables.cellsOnY];
+				}
+				if (i > variables.cellsOnX * (variables.cellsOnY - 1)) {
+					var bottom = currentArray[i + variables.cellsOnX - variables.cellsOnX * variables.cellsOnY];
+				}
+				
+				if (typeof(left) != 'number') var left = currentArray[i - 1];
+				if (typeof(right) != 'number') var right = currentArray[i + 1];
+				if (typeof(top) != 'number') var top = currentArray[i - variables.cellsOnX];
+				if (typeof(bottom) != 'number') var bottom = currentArray[i + variables.cellsOnX];
+				
 			
-			var left = currentArray[i - 1];
-			var right = currentArray[i + 1];
-			var top = currentArray[i - variables.cellsOnX];
-			var bottom = currentArray[i + variables.cellsOnX];
+			} else {
+				var left = currentArray[i - 1];
+				var right = currentArray[i + 1];
+				var top = currentArray[i - variables.cellsOnX];
+				var bottom = currentArray[i + variables.cellsOnX];
+			}
+			
 			
 			for (var j = 0; j < rulesArr.length; j++) {
-				if (rulesArr[j].charAt(0) == currentArray[i]) {
-					if ((rulesArr[j].charAt(1) == top) && (rulesArr[j].charAt(2) == right) && (rulesArr[j].charAt(3) == bottom) && (rulesArr[j].charAt(4) == left)) {
-						nextArray[i] = rulesArr[j].charAt(5);
+				if (parseInt(rulesArr[j].charAt(0)) == currentArray[i]) {
+					if ((parseInt(rulesArr[j].charAt(1)) == top) && (parseInt(rulesArr[j].charAt(2)) == right) && (parseInt(rulesArr[j].charAt(3)) == bottom) && (parseInt(rulesArr[j].charAt(4)) == left)) {
+						nextArray[i] = parseInt(rulesArr[j].charAt(5));
 					}
 				}
 			}

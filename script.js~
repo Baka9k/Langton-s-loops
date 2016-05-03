@@ -55,12 +55,13 @@ Loops.init = function() {
 	Loops.physics.methods.expandRules(Loops.physics.rules);
 	Loops.graphics.methods.draw();
 	
-	setInterval(function() {
+	function step () {
+		window.requestAnimationFrame(step);
 		Loops.physics.methods.step();
 		Loops.graphics.methods.draw();
-	}, 300);
-
+	}
 	
+	step();
 };
 
 
@@ -117,50 +118,65 @@ Loops.physics.methods = {
 			var next = 0;
 		}
 		
-		for (var i = 0; i < currentArray.length; i++) {
-		
-			// edges
-			if ((Number.isInteger(i / variables.cellsOnX)) || (Number.isInteger((i+1) / variables.cellsOnX)) || (i < variables.cellsOnX) || (i > variables.cellsOnX * (variables.cellsOnY - 1))) {
-				
-				if (Number.isInteger(i / variables.cellsOnX)) {
-					var left = currentArray[i + variables.cellsOnX - 1];
-				} 
-				if (Number.isInteger((i+1) / variables.cellsOnX)) {
-					var right = currentArray[i - variables.cellsOnX + 1];
-				}
-				if (i < variables.cellsOnX) {
-					var top = currentArray[i - variables.cellsOnX + variables.cellsOnX * variables.cellsOnY];
-				}
-				if (i > variables.cellsOnX * (variables.cellsOnY - 1)) {
-					var bottom = currentArray[i + variables.cellsOnX - variables.cellsOnX * variables.cellsOnY];
-				}
-				
-				if (typeof(left) != 'number') var left = currentArray[i - 1];
-				if (typeof(right) != 'number') var right = currentArray[i + 1];
-				if (typeof(top) != 'number') var top = currentArray[i - variables.cellsOnX];
-				if (typeof(bottom) != 'number') var bottom = currentArray[i + variables.cellsOnX];
-				
+		for (var i = 1; i < variables.cellsOnY - 1; i++) {
+			for (var j = 1; j < variables.cellsOnX - 1; j++) {
+				var offset = i * variables.cellsOnX + j;
+				var left = currentArray[offset - 1];
+				var right = currentArray[offset + 1];
+				var top = currentArray[offset - variables.cellsOnX];
+				var bottom = currentArray[offset + variables.cellsOnX];
 			
-			} else {
-				var left = currentArray[i - 1];
-				var right = currentArray[i + 1];
-				var top = currentArray[i - variables.cellsOnX];
-				var bottom = currentArray[i + variables.cellsOnX];
+				nextArray[offset] = Loops.physics.methods.nextState(rulesArr, currentArray[offset], left, right, top, bottom);
 			}
-			
-			
-			nextArray[i] = Loops.physics.methods.nextState(rulesArr, currentArray[i], left, right, top, bottom);
-			
 		}
 		
 		Loops.physics.variables.currentArray = next;
+		
+		//boundary conditions:
+		//top
+		for (var i = 1; i < variables.cellsOnX - 1; i++) {
+			var left = currentArray[i - 1];
+			var right = currentArray[i + 1];
+			var top = currentArray[variables.cellsOnX*(variables.cellsOnY-2) + i];
+			var bottom = currentArray[variables.cellsOnX + i];
+		
+			//nextArray[i] = Loops.physics.methods.nextState(rulesArr, currentArray[i], left, right, top, bottom);
+			nextArray[variables.cellsOnX*(variables.cellsOnY-1) + i] = 4;
+		}
+		//bottom
+		for (var i = variables.cellsOnX*(variables.cellsOnY-1) + 1; i < variables.cellsOnX*variables.cellsOnY - 1; i++) {
+			var left = currentArray[i - 1];
+			var right = currentArray[i + 1];
+			var top = currentArray[variables.cellsOnX*(variables.cellsOnY - 2) + i];
+			var bottom = currentArray[i-variables.cellsOnX*(variables.cellsOnY-1)];
+		
+			nextArray[i] = Loops.physics.methods.nextState(rulesArr, currentArray[i], left, right, top, bottom);
+		}
+		//left
+		for (var i = 0; i < variables.cellsOnX*variables.cellsOnY; i += variables.cellsOnX) {
+			var left = currentArray[i + variables.cellsOnX - 1];
+			var right = currentArray[i + 1];
+			var top = currentArray[i - variables.cellsOnX];
+			var bottom = currentArray[i + variables.cellsOnX];
+		
+			nextArray[i] = Loops.physics.methods.nextState(rulesArr, currentArray[i], left, right, top, bottom);
+		}
+		//right
+		for (var i = variables.cellsOnX-1; i < variables.cellsOnX*variables.cellsOnY; i += variables.cellsOnX) {
+			var left = currentArray[i - 1];
+			var right = currentArray[i - variables.cellsOnX + 1];
+			var top = currentArray[i - variables.cellsOnX];
+			var bottom = currentArray[i + variables.cellsOnX];
+		
+			nextArray[i] = Loops.physics.methods.nextState(rulesArr, currentArray[i], left, right, top, bottom);
+		}
 	},
 	
 	nextState: function(rulesArr, center, left, right, top, bottom) {
-		for (var j = 0; j < rulesArr.length; j++) {
-			if (parseInt(rulesArr[j].charAt(0)) == currentArray[i]) {
-				if ((parseInt(rulesArr[j].charAt(1)) == top) && (parseInt(rulesArr[j].charAt(2)) == right) && (parseInt(rulesArr[j].charAt(3)) == bottom) && (parseInt(rulesArr[j].charAt(4)) == left)) {
-					return parseInt(rulesArr[j].charAt(5));
+		for (var c = 0; c < rulesArr.length; c++) {
+			if (parseInt(rulesArr[c].charAt(0)) == center) {
+				if ((parseInt(rulesArr[c].charAt(1)) == top) && (parseInt(rulesArr[c].charAt(2)) == right) && (parseInt(rulesArr[c].charAt(3)) == bottom) && (parseInt(rulesArr[c].charAt(4)) == left)) {
+					return parseInt(rulesArr[c].charAt(5));
 				}
 			}
 		}

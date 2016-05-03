@@ -158,7 +158,7 @@ Loops.physics.methods = {
 	
 	nextState: function(rulesArr, center, left, right, top, bottom) {
 		for (var j = 0; j < rulesArr.length; j++) {
-			if (parseInt(rulesArr[j].charAt(0)) == center) {
+			if (parseInt(rulesArr[j].charAt(0)) == currentArray[i]) {
 				if ((parseInt(rulesArr[j].charAt(1)) == top) && (parseInt(rulesArr[j].charAt(2)) == right) && (parseInt(rulesArr[j].charAt(3)) == bottom) && (parseInt(rulesArr[j].charAt(4)) == left)) {
 					return parseInt(rulesArr[j].charAt(5));
 				}

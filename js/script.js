@@ -1,7 +1,7 @@
 var Loops = {
 	graphics: {
 		methods: {},
-		variables: {},
+		variables: {}
 	},
 	physics: {
 		variables: {},
@@ -9,13 +9,13 @@ var Loops = {
 		expandedRules: [],
 		array0: [],
 		array1: [],
-		methods: {},
+		methods: {}
 	},
 	settings: {
 		cellwidth: 12,
-		cellheight: 12,
-	},
-}
+		cellheight: 12
+	}
+};
 
 
 
@@ -187,7 +187,7 @@ Loops.physics.methods = {
 		var rulesArr = Loops.physics.expandedRules;
 		var methods = Loops.physics.methods;
 		methods.applyRules(rulesArr);
-	},
+	}
 	
 };
 
@@ -281,17 +281,17 @@ Loops.graphics.methods = {
 				var cellcolor = gMethods.getColor (array[cellnumber]);
 				gMethods.drawCell (x, y, cellcolor);
 				x += settings.cellwidth;
-			};
+			}
 			x = 0;
 			y += settings.cellheight;
-		};
+		}
 	},
 	
 	draw: function() {
 		var methods = Loops.graphics.methods;
 		methods.drawBackground();
 		methods.drawCells();
-	},
+	}
 	
 };
 
